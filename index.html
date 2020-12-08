@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shapes with SVG and CSS</title>
     <link rel="stylesheet" href="./style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.3.0/d3.min.js"
+        integrity="sha512-wKo55+1oH5DGJ19ScVUHTtcZiqJuSnknSs8CgzzEm1lNftJRDXN/kWpF9Kx+vPam8HBeg53OxS0MYd0+Iz9cjQ=="
+        crossorigin="anonymous"></script>
 </head>
+
 <body>
     <svg width="960" height="500">
         <circle cx="50" cy="50" r="40"></circle>
@@ -14,9 +19,9 @@
         <rect x=100 y="125" width="50" height="50" fill="#82cc2a"></rect>
 
         <!-- group -->
-        <g transform="translate(0,100)" fill="#adf6ff" stroke="black"> 
+        <g transform="translate(0,100)" fill="#adf6ff" stroke="black">
             <circle cx="50" cy="150" r="40" stroke-width="3"></circle>
-            <rect x=100 y="125" width="50" height="50" ></rect>
+            <rect x=100 y="125" width="50" height="50"></rect>
         </g>
 
         <!-- lineas y polilineas -->
@@ -33,9 +38,15 @@
             <line x1="200" y1="300" x2="300" y2="300"></line>
             <path d="M300 300 L350 200 L400 400 L450 350"></path>
         </g>
+    </svg>
+
+    <svg id="svg-face" width="960" height="500">
 
     </svg>
 
     <h1>D3 Tutorial</h1>
+
+    <script src="./app.js"></script>
 </body>
+
 </html>
