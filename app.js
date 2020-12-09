@@ -77,3 +77,78 @@ const mouth = g.append('path')
         endAngle:  3 * Math.PI / 2
 }))
     
+/// --------------------------------------- ///
+// Grafico de barras
+
+const svgChart = d3.select('#svg-chart')
+
+const widthSvgChart = +svgChart.attr('width') // trae el atributo width del DOM
+const heightSvgChart = +svgChart.attr('height') // trae el atributo height del DOM
+
+const render = (data) => {
+    const margin = {
+        top: 20, 
+        right: 20,
+        bottom: 50,
+        left: 150
+    }
+    const innerWidth = widthSvgChart - margin.left - margin.right
+    const innerHeight = heightSvgChart - margin.top - margin.bottom
+
+    const xScale = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.Numero)])
+        .range([0, innerWidth])
+
+    const yScale = d3.scaleBand()
+        .domain(data.map(d => d.Raza))
+        .range([0, innerHeight])
+        .padding(0.1)
+
+    const g = svgChart.append('g')
+        .attr('transform', `translate(${margin.left}, ${margin.top})`)
+
+    const xAxisTickFormat = (number) => 
+        d3.format('.3s')(number)
+            .replace('G', 'B')
+
+    const xAxis = d3.axisBottom(xScale)
+        .tickFormat(xAxisTickFormat)
+        .tickSize(-innerHeight)
+
+    g.append('g')
+        .call(d3.axisLeft(yScale).tickSize(-innerWidth)) // Pone el eje y
+        .selectAll('.tick line') // '.domain, .tick line' el . domain se puede quitar pero lo use para hacer el recuadro exterior
+            .remove() // el .domain Remueve las lineas exteriores e innecesarias del eje Y (Se puede ver al inspeccionar elemento en la pagina)
+                      // el .tick line Remueve las lineas interiores ubicadas dentro del .tick (Se puede ver al inspeccionar elemento en la pagina)
+
+    const xAxisGroup = g.append('g').call(xAxis)
+        .attr('transform', `translate(0, ${innerHeight})`) // Pone el eje x
+
+    // xAxisGroup.selectAll('.domain').remove() // el .domain Remueve las lineas exteriores e innecesarias del eje X (Se puede ver al inspeccionar elemento en la pagina)
+
+    xAxisGroup.append('text')
+        .attr('class', 'axis-label')
+        .attr('x', innerWidth/2)
+        .attr('y', 45)
+        .attr('fill', 'black')
+        .text('Población')
+
+    g.selectAll('rect').data(data)
+        .enter().append('rect')
+            .attr('y', d => yScale(d.Raza))
+            .attr('width', d => xScale(d.Numero))
+            .attr('height', yScale.bandwidth())
+
+    g.append('text')
+        .attr('class', 'title')
+        .attr('y', -2)
+        .text('Raza de perros VS Número en el mundo')
+}
+
+d3.csv('Razas de perros.csv').then(data => {
+    data.forEach(d => {
+        d.Numero = +d.Numero
+    })
+    console.log(data)
+    render(data)
+})
